@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cookieParser()); // Add cookie-parser middleware
 app.use(cors({
-    origin: "https://oshud-kini-management-system.vercel.app",
+    origin: "https://oshud-kini-managment-system.vercel.app",
     credentials: true  // Allow credentials (cookies)
 }));
 app.use(express.json());
