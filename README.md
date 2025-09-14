@@ -128,10 +128,10 @@ You can test the API endpoints using curl or a tool like Postman:
 
 ```bash
 # Test root endpoint
-curl http://localhost:5000/
+curl https://oshud-kini-management-server.onrender.com/
 
 # Test authentication (replace with valid credentials)
-curl -X POST http://localhost:5000/api/auth/login -H "Content-Type: application/json" -d '{"username":"test@example.com","password":"password"}'
+curl -X POST https://oshud-kini-management-server.onrender.com/api/auth/login -H "Content-Type: application/json" -d '{"username":"test@example.com","password":"password"}'
 ```
 
 ## Troubleshooting

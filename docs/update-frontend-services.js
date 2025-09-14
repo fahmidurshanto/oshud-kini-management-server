@@ -9,7 +9,7 @@
 // Example of how to update productService.js
 const productServiceExample = `
 // productService.js - Updated to use backend API
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://oshud-kini-management-server.onrender.com';
 
 // Function to get products
 export const getProducts = async () => {
@@ -135,7 +135,7 @@ export const deleteProduct = async (id) => {
 // Example of how to update employeeService.js
 const employeeServiceExample = `
 // employeeService.js - Updated to use backend API
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://oshud-kini-management-server.onrender.com';
 
 // Function to get employees
 export const getEmployees = async () => {
@@ -285,7 +285,7 @@ export const activateEmployee = async (id) => {
 // Example of how to update salaryService.js
 const salaryServiceExample = `
 // salaryService.js - Updated to use backend API
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://oshud-kini-management-server.onrender.com';
 
 // Function to get salary history
 export const getSalaryHistory = async () => {
@@ -411,7 +411,7 @@ export const deleteSalaryRecord = async (id) => {
 // Example of how to update dashboardService.js
 const dashboardServiceExample = `
 // dashboardService.js - Updated to use backend API
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://oshud-kini-management-server.onrender.com';
 
 // Function to fetch dashboard data
 export const getDashboardData = async () => {

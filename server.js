@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cookieParser()); // Add cookie-parser middleware
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://oshud-kini-managment-system.vercel.app",
     credentials: true  // Allow credentials (cookies)
 }));
 app.use(express.json());
@@ -82,7 +82,7 @@ app.use((req, res) => {
 // Start server regardless of MongoDB connection status
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  console.log(`CORS enabled for http://localhost:5173 with credentials support`);
+  console.log(`CORS enabled for https://oshud-kini-managment-system.vercel.app with credentials support`);
   if (!mongoConnected) {
     console.log('Warning: MongoDB is not connected. Some features may not work properly.');
   }

@@ -2,7 +2,7 @@
 const axios = require('axios');
 
 // Base URL for the API
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'https://oshud-kini-management-server.onrender.com';
 
 // Test data
 const testProduct = {

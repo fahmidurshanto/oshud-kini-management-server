@@ -63,12 +63,12 @@ For production environments, you should implement proper authentication and auth
 To test the API without authentication:
 
 1. Start the backend server: `npm run dev`
-2. Verify the server is running: `curl http://localhost:5000/`
+2. Verify the server is running: `curl https://oshud-kini-management-server.onrender.com/`
 3. Test API endpoints without authentication:
-   - `curl http://localhost:5000/api/products`
-   - `curl http://localhost:5000/api/employees`
-   - `curl http://localhost:5000/api/salaries`
-   - `curl http://localhost:5000/api/dashboard`
+   - `curl https://oshud-kini-management-server.onrender.com/api/products`
+   - `curl https://oshud-kini-management-server.onrender.com/api/employees`
+   - `curl https://oshud-kini-management-server.onrender.com/api/salaries`
+   - `curl https://oshud-kini-management-server.onrender.com/api/dashboard`
 
 All endpoints should return data without requiring authentication headers.
 

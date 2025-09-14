@@ -403,7 +403,7 @@ To connect the frontend services to the backend API, you'll need to replace the 
 
 ```javascript
 // Example productService.js update
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://oshud-kini-management-server.onrender.com';
 
 // Function to get products
 export const getProducts = async () => {
