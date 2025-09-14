@@ -1,6 +1,8 @@
 const Product = require('../models/Product');
 const Employee = require('../models/Employee');
 const Salary = require('../models/Salary');
+const Sale = require('../models/Sale');
+const Expense = require('../models/Expense'); // Add Expense model
 
 // Get dashboard data
 const getDashboardData = async (req, res) => {
@@ -30,6 +32,30 @@ const getDashboardData = async (req, res) => {
     // In a real application, you would have sales transactions
     const totalSales = totalProductValue; // Placeholder for actual sales data
     const totalPurchases = totalProductValue; // Placeholder for actual purchase data
+    
+    // Get sales statistics
+    const totalSalesCount = await Sale.countDocuments();
+    const totalRevenueResult = await Sale.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$finalAmount" }
+        }
+      }
+    ]);
+    const totalRevenue = totalRevenueResult.length > 0 ? totalRevenueResult[0].totalRevenue : 0;
+
+    // Get expense statistics
+    const totalExpensesCount = await Expense.countDocuments();
+    const totalExpenseAmountResult = await Expense.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalExpenseAmount: { $sum: "$amount" }
+        }
+      }
+    ]);
+    const totalExpenseAmount = totalExpenseAmountResult.length > 0 ? totalExpenseAmountResult[0].totalExpenseAmount : 0;
 
     const stats = [
       {
@@ -57,14 +83,14 @@ const getDashboardData = async (req, res) => {
         color: "bg-purple-500"
       },
       {
-        title: "Total Sales",
-        value: `৳${totalSales.toLocaleString()}`,
+        title: "Total Revenue",
+        value: `৳${totalRevenue.toLocaleString()}`,
         icon: "📈",
         color: "bg-indigo-500"
       },
       {
-        title: "Total Purchases",
-        value: `৳${totalPurchases.toLocaleString()}`,
+        title: "Total Sales",
+        value: totalSalesCount,
         icon: "🛒",
         color: "bg-pink-500"
       },
@@ -79,6 +105,12 @@ const getDashboardData = async (req, res) => {
         value: `৳${totalSalaryExpenses.toLocaleString()}`,
         icon: "💸",
         color: "bg-red-500"
+      },
+      {
+        title: "Total Expenses",
+        value: `৳${totalExpenseAmount.toLocaleString()}`,
+        icon: "📋",
+        color: "bg-orange-500"
       }
     ];
 
@@ -86,6 +118,8 @@ const getDashboardData = async (req, res) => {
     const recentProducts = await Product.find().sort({ createdAt: -1 }).limit(3);
     const recentEmployees = await Employee.find().sort({ createdAt: -1 }).limit(3);
     const recentSalaries = await Salary.find().sort({ processedDate: -1 }).limit(3);
+    const recentSales = await Sale.find().sort({ saleDate: -1 }).limit(3);
+    const recentExpenses = await Expense.find().sort({ createdAt: -1 }).limit(3); // Add recent expenses
 
     // Combine and sort all recent activities
     const allActivities = [
@@ -112,6 +146,22 @@ const getDashboardData = async (req, res) => {
         item: salary.month,
         time: new Date(salary.processedDate).toLocaleDateString(),
         timestamp: salary.processedDate
+      })),
+      ...recentSales.map(sale => ({
+        id: sale._id,
+        type: 'sale',
+        action: 'New sale completed',
+        item: sale.customerName,
+        time: new Date(sale.saleDate).toLocaleDateString(),
+        timestamp: sale.saleDate
+      })),
+      ...recentExpenses.map(expense => ({ // Add recent expenses to activities
+        id: expense._id,
+        type: 'expense',
+        action: 'New expense added',
+        item: expense.purpose,
+        time: new Date(expense.expenseDate).toLocaleDateString(),
+        timestamp: expense.expenseDate
       }))
     ];
 
@@ -137,6 +187,16 @@ const getDashboardData = async (req, res) => {
             icon = "💰";
             iconColor = "bg-yellow-100";
             iconTextColor = "text-yellow-500";
+            break;
+          case 'sale':
+            icon = "💰";
+            iconColor = "bg-green-100";
+            iconTextColor = "text-green-500";
+            break;
+          case 'expense': // Add expense icon
+            icon = "📋";
+            iconColor = "bg-red-100";
+            iconTextColor = "text-red-500";
             break;
           default:
             icon = "📝";
@@ -184,6 +244,10 @@ const getDashboardData = async (req, res) => {
       activeEmployees,
       totalSales,
       totalPurchases,
+      totalRevenue,
+      totalSalesCount,
+      totalExpensesCount,
+      totalExpenseAmount,
       additionalData
     });
   } catch (error) {

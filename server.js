@@ -44,6 +44,8 @@ const productRoutes = require('./routes/productRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
 const salaryRoutes = require('./routes/salaryRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const salesRoutes = require('./routes/salesRoutes');
+const expenseRoutes = require('./routes/expenseRoutes'); // Add expense routes
 
 // Import middleware
 const authenticateToken = require('./middleware/authMiddleware');
@@ -64,6 +66,8 @@ app.use('/api/products', productRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/salaries', salaryRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/sales', salesRoutes);
+app.use('/api/expenses', expenseRoutes); // Add expense routes
 
 // Global error handler
 app.use((err, req, res, next) => {
