@@ -33,6 +33,10 @@ const saleSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  customerPhone: {
+    type: String,
+    trim: true
+  },
   items: [saleItemSchema],
   totalAmount: {
     type: Number,

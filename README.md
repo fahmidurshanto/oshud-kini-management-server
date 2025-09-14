@@ -32,6 +32,7 @@ You have two options for setting up MongoDB:
 
 ### Option 2: MongoDB Atlas (Cloud)
 
+
 1. Sign up for a free account at [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
 2. Create a new cluster
 3. Add database user and IP whitelist

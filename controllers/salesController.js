@@ -17,7 +17,7 @@ const getSales = async (req, res) => {
 // Create a new sale
 const createSale = async (req, res) => {
   try {
-    const { customerName, items, discount = 0 } = req.body;
+    const { customerName, customerPhone, items, discount = 0 } = req.body;
 
     if (!customerName || !items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ 
@@ -76,6 +76,7 @@ const createSale = async (req, res) => {
     // Create the sale record
     const sale = new Sale({
       customerName,
+      customerPhone, // Include customer phone in the sale record
       items: processedItems,
       totalAmount,
       discount,
