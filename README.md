@@ -44,7 +44,7 @@ Create a `.env` file in the root directory with the following variables:
 
 ```env
 # MongoDB connection string
-MONGODB_URI=mongodb://localhost:27017/oshud-kini-management
+MONGODB_URI=your-mongodb-connection-string
 
 # JWT secret key
 JWT_SECRET=your-jwt-secret-key-here
