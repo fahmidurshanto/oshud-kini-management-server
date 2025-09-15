@@ -53,6 +53,53 @@ const createExpense = async (req, res) => {
   }
 };
 
+// Update an expense
+const updateExpense = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { purpose, amount, expenseDate } = req.body;
+
+    // Validate required fields
+    if (!purpose || !amount) {
+      return res.status(400).json({ 
+        message: 'Purpose and amount are required' 
+      });
+    }
+
+    // Validate amount
+    if (amount <= 0) {
+      return res.status(400).json({ 
+        message: 'Amount must be greater than 0' 
+      });
+    }
+
+    // Find the expense
+    const expense = await Expense.findById(id);
+    if (!expense) {
+      return res.status(404).json({ 
+        message: 'Expense not found' 
+      });
+    }
+
+    // Update the expense
+    expense.purpose = purpose;
+    expense.amount = amount;
+    expense.expenseDate = expenseDate ? new Date(expenseDate) : expense.expenseDate;
+
+    await expense.save();
+
+    res.json({ 
+      message: 'Expense updated successfully',
+      expense 
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      message: 'Server error', 
+      error: error.message 
+    });
+  }
+};
+
 // Delete an expense
 const deleteExpense = async (req, res) => {
   try {
@@ -137,6 +184,7 @@ const getExpenseStats = async (req, res) => {
 module.exports = {
   getExpenses,
   createExpense,
+  updateExpense,
   deleteExpense,
   getExpenseStats
 };
