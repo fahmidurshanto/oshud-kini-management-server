@@ -6,6 +6,14 @@ dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'oshud-kini-management-secret-key';
 
+// In-memory storage for OTPs (in production, use Redis or database)
+const otpStorage = new Map();
+
+// Generate a random 6-digit OTP
+const generateOTP = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
 // Register a new user
 const register = async (req, res) => {
   try {
@@ -155,9 +163,98 @@ const getCurrentUser = async (req, res) => {
   }
 };
 
+// Send OTP for email verification
+const sendOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
+
+    // Check if user exists
+    const user = await User.findOne({ email });
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Generate OTP
+    const otp = generateOTP();
+    
+    // Store OTP with expiration (5 minutes)
+    otpStorage.set(email, {
+      otp,
+      expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes
+    });
+
+    // In a real application, you would send the OTP via email here
+    // For demonstration, we're just logging it
+    console.log(`OTP for ${email}: ${otp}`);
+
+    res.json({ 
+      message: 'OTP sent successfully',
+      // In production, don't send the OTP in the response
+      // otp: otp // Only for testing purposes
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      message: 'Server error', 
+      error: error.message 
+    });
+  }
+};
+
+// Verify OTP
+const verifyOTP = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    
+    if (!email || !otp) {
+      return res.status(400).json({ message: 'Email and OTP are required' });
+    }
+
+    // Check if OTP exists and is valid
+    const storedOTP = otpStorage.get(email);
+    
+    if (!storedOTP) {
+      return res.status(400).json({ message: 'OTP not found or expired' });
+    }
+
+    // Check expiration
+    if (Date.now() > storedOTP.expiresAt) {
+      otpStorage.delete(email); // Remove expired OTP
+      return res.status(400).json({ message: 'OTP has expired' });
+    }
+
+    // Check if OTP matches
+    if (storedOTP.otp !== otp) {
+      return res.status(400).json({ message: 'Invalid OTP' });
+    }
+
+    // Remove used OTP
+    otpStorage.delete(email);
+
+    // Update user as verified (in a real app, you might want to store this in the database)
+    // For now, we'll just return success
+
+    res.json({ 
+      message: 'OTP verified successfully',
+      verified: true
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      message: 'Server error', 
+      error: error.message 
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
-  getCurrentUser
+  getCurrentUser,
+  sendOTP,
+  verifyOTP
 };
